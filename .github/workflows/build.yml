@@ -1,0 +1,78 @@
+name: Build & Release APK
+
+# Triggered by:
+#   - push to master/main         → build + upload workflow artifact (CI smoke check)
+#   - push of a tag matching v*   → build + publish a GitHub Release with the APK attached
+#   - manual Actions-tab dispatch → build, optionally publish a Release if a tag is supplied
+on:
+  push:
+    branches: [ main, master ]
+    tags: [ 'v*' ]
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Tag name for the Release (e.g. v1.0.1). Leave blank to skip publishing.'
+        required: false
+        default: ''
+
+# `contents: write` is needed for `gh release create` to push a new tag + release.
+# Without this, the default GITHUB_TOKEN only has read access and the release step would 403.
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      # JDK 17 — required by Android Gradle Plugin 8.1.
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      # Installs the Android SDK command-line tools and accepts the SDK licenses.
+      # AGP then auto-downloads platform-34 / build-tools as needed.
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      # Provides Gradle 8.2 on PATH (matches the project's wrapper version), so we don't
+      # need to commit the binary gradle-wrapper.jar.
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.2'
+
+      # Pure-JVM tests on the brightness rule. Cheap (<10 s) and catches threshold regressions
+      # before we spend time on the APK build.
+      - name: Run unit tests
+        run: gradle testDebugUnitTest --no-daemon --stacktrace
+
+      - name: Build debug APK
+        run: gradle assembleDebug --no-daemon --stacktrace
+
+      # The finished APK is uploaded as a downloadable artifact on the workflow run page.
+      # This runs on every build (including non-release runs) so PR/branch builds are still
+      # downloadable for ad-hoc testing without creating a Release.
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+
+      # Only fires on a `v*` tag push, or when the user typed a release_tag in the manual
+      # dispatch form. `gh release create` will create the tag if it doesn't already exist,
+      # so dispatch-with-a-fresh-tag works without an extra `git tag` step.
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v') || github.event.inputs.release_tag != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${{ github.event.inputs.release_tag || github.ref_name }}"
+          gh release create "$TAG" app/build/outputs/apk/debug/app-debug.apk \
+            --title "HavalBrightness $TAG" \
+            --generate-notes

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Haval Brightness</string>
+    <string name="title">Haval Brightness</string>
+
+    <!-- "Pixel 5 · Android 14 · API 34" -->
+    <string name="device_info_fmt">%1$s · Android %2$s · API %3$d</string>
+
+    <string name="label_permission">Modify system settings</string>
+    <string name="permission_granted">Granted — boot adjustment will run.</string>
+    <string name="permission_missing">Not granted — tap below to allow.</string>
+    <string name="grant_permission">Grant permission</string>
+
+    <string name="label_schedule">Schedule</string>
+    <!-- "Daytime window: 06:00 – 19:00" -->
+    <string name="window_fmt">Daytime window: %1$02d:00 – %2$02d:00</string>
+    <!-- "Now: 14:00 (daytime) → brightness 255" -->
+    <string name="current_fmt">Now: %1$02d:00 (%2$s) → brightness %3$d</string>
+    <string name="daytime">daytime</string>
+    <string name="nighttime">nighttime</string>
+
+    <string name="apply_now">Apply now</string>
+    <string name="applied_fmt">Applied brightness %1$d.</string>
+    <string name="apply_failed_no_permission">Cannot apply — permission missing.</string>
+</resources>

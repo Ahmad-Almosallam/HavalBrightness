@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Simple sun glyph used as the adaptive-icon foreground (matches the brightness theme). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <group android:translateX="30" android:translateY="30">
+        <!-- Sun core -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M24,24m-10,0a10,10 0,1 1,20 0a10,10 0,1 1,-20 0" />
+        <!-- 8 rays -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M22,0h4v8h-4z" />
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M22,40h4v8h-4z" />
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M0,22h8v4h-8z" />
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M40,22h8v4h-8z" />
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M6.3,4.2l2.8,-2.8l5.7,5.7l-2.8,2.8z" />
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M33.2,31.1l2.8,-2.8l5.7,5.7l-2.8,2.8z" />
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M4.2,41.7l5.7,-5.7l2.8,2.8l-5.7,5.7z" />
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M31.1,14.8l5.7,-5.7l2.8,2.8l-5.7,5.7z" />
+    </group>
+</vector>

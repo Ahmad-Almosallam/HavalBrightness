@@ -1,0 +1,51 @@
+// App-module build file. Closest .NET analogue: the .csproj — it lists the SDK levels,
+// compiler options, and NuGet-style dependencies for this one module.
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace 'com.example.havalbrightness'
+    compileSdk 34                          // compile against newest SDK...
+
+    defaultConfig {
+        applicationId "com.example.havalbrightness"
+        minSdk 24
+        targetSdk 28                       // ...but TARGET Android 9 to match the Haval head-unit OS
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+
+    buildFeatures {
+        viewBinding true                   // generates a typed binding class per layout (no findViewById)
+    }
+}
+
+dependencies {
+    // --- AndroidX core / UI ---
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.activity:activity-ktx:1.8.2'
+
+    // --- Unit tests (pure JVM, no device required) ---
+    testImplementation 'junit:junit:4.13.2'
+}

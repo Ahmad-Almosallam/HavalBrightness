@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The manifest is the app's contract with the OS: declared permissions, components
+  (Activity/Service/Receiver), and entry points. There is no direct .NET equivalent;
+  think of it as a combination of app.config + assembly attributes + a component registry.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+      WRITE_SETTINGS is what lets us change the system brightness. On Android 6+ this is a
+      "special" permission: it cannot be granted with the normal runtime-permission dialog;
+      the user has to flip a toggle in Settings → Apps → Special access → Modify system
+      settings. The app launches that screen from MainActivity if Settings.System.canWrite()
+      returns false.
+    -->
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+
+    <!-- Auto-run the brightness adjustment after the head-unit boots. -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <application
+        android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.HavalBrightness">
+
+        <!-- Single status / "apply now" screen; LAUNCHER intent-filter makes it the entry point. -->
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!--
+          Fires once when the device finishes booting. We register BOTH boot-completed actions:
+            - BOOT_COMPLETED runs after the user unlocks (normal flow on consumer Android).
+            - LOCKED_BOOT_COMPLETED runs earlier, while the device is still in direct-boot
+              mode. Head units often boot straight to the home screen with no lock; whichever
+              fires first wins, the second is a no-op because we only adjust once per boot.
+        -->
+        <receiver
+            android:name=".boot.BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>

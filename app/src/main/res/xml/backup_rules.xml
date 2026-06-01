@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Auto-backup rules. The app has no user data to back up (settings are hard-coded constants),
+  so this file just declares an empty content set to be explicit.
+-->
+<full-backup-content />

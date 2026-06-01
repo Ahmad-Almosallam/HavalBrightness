@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Material 3 DayNight theme; no custom colors needed for this utility app. -->
+    <style name="Theme.HavalBrightness" parent="Theme.Material3.DayNight" />
+</resources>

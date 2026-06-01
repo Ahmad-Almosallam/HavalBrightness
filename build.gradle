@@ -1,0 +1,7 @@
+// Project-level build file. Think of this as the solution-wide build configuration:
+// it only declares the plugins (and their versions) that the modules may apply.
+// `apply false` means "make the plugin available, but don't apply it here".
+plugins {
+    id 'com.android.application' version '8.1.4' apply false
+    id 'org.jetbrains.kotlin.android' version '1.9.22' apply false
+}
